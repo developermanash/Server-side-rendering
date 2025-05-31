@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('partials/head') %>
+    <title>
+      <%= blog.title %> | Blog
+    </title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+
+      .blog-wrapper {
+        min-height: 100vh;
+        background-color: #f9f9f9;
+        padding: 40px;
+      }
+
+      .blog-card {
+        background: linear-gradient(to bottom right, #fefefe, #f3f4f6);
+        /* soft light gradient */
+        color: #222;
+        padding: 40px;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+        border-radius: 16px;
+      }
+
+      .cover-image {
+        max-height: 350px;
+        object-fit: cover;
+        width: 80%;
+        height: auto;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        margin-left: 15%;
+        display: block;
+      }
+
+      .author-info {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      .author-info img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin-right: 15px;
+      }
+
+      .blog-body {
+        font-size: 1.15rem;
+        line-height: 1.9;
+        margin-top: 30px;
+        white-space: pre-wrap;
+      }
+    </style>
+</head>
+
+<body>
+  <%- include('partials/nav') %>
+
+    <div class="blog-wrapper">
+      <div class="blog-card">
+        <h1 class="text-center mb-4">
+          <%= blog.title %>
+        </h1>
+
+        <% if (blog.coverImageURL) { %>
+          <img src="<%= blog.coverImageURL %>" alt="cover image" class="cover-image">
+          <% } %>
+
+            <div class="blog-body">
+              <%= blog.body %>
+            </div>
+            <div class="author-info">
+              <img src="<%= blog.createdBy?.profilePhoto || '/images/User-Avatar-PNG-Transparent-Image.png' %>"
+                alt="Author">
+              <div>
+                <strong>
+                  <%= blog.createdBy?.fullName || "Unknown Author" %>
+                </strong><br>
+                <small class="text-muted">Posted on <%= blog.createdAt.toDateString() %></small>
+              </div>
+            </div>
+            <div class="mt-5">
+              <h3>Comments (<%= comments.length %>)</h3>
+
+              <% if (!comments || comments.length===0) { %>
+                <p>No comments yet. Be the first!</p>
+
+                <% if (!locals.user) { %>
+                 <p>⚠️You  have to signin to enable comments!</p>
+                <% } %>
+                <% } else { %>
+                  <% comments.forEach(comment=> { %>
+                    <div class="mb-3 p-3 border rounded bg-light">
+                      <strong>
+                        <%= comment.createdBy.fullName %>
+                      </strong>
+                      <p>
+                        <%= comment.content %>
+                      </p>
+                      <small class="text-muted">commented  on <%= blog.createdAt.toDateString() %></small>
+                    </div>
+                    <% }) %>
+                      <% } %>
+
+                        <% if (locals.user) { %>
+                          <form action="/blog/comment/<%= blog._id %>" method="POST" class="mt-4">
+                            <div class="form-group">
+                              <textarea name="content" class="form-control" rows="3" placeholder="Write a comment..."
+                                required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                          </form>
+                          <% } %>
+
+            </div>
+
+      </div>
+    </div>
+
+    <%- include('partials/scripts') %>
+</body>
+
+</html>

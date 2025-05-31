@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <%- include('partials/head') %>
+    <title>Add New Blog</title>
+  </head>
+  <body>
+
+    <%- include('partials/nav') %> 
+
+    <div class="container mt-5">
+      <div class="card shadow-lg">
+        <div class="card-header bg-secondary text-white">
+          <h3 class="mb-0">Add a New Blog</h3>
+        </div>
+        <div class="card-body">
+          <form action="/blog/add-new" method="POST" enctype="multipart/form-data">
+            <!-- Blog Title -->
+            <div class="mb-3">
+              <label for="title" class="form-label">Blog Title</label>
+              <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+
+            <!-- Cover Image URL -->
+            <div class="mb-3">
+              <label for="coverImageURL" class="form-label">Cover Image URL (optional)</label>
+              <input type="file" class="form-control" id="coverImage" name="coverImage">
+            </div>
+
+            <!-- Blog Body -->
+            <div class="mb-3">
+              <label for="body" class="form-label">Blog Content</label>
+              <textarea class="form-control" id="body" name="body" rows="6" required></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-info">Publish Blog</button>
+          </form>
+        </div>
+      </div>
+
+      <% if (locals.error) { %>
+        <div class="alert alert-danger mt-3">
+          <%= locals.error %>
+        </div>
+      <% } %>
+    </div>
+
+    <%- include('partials/scripts') %>
+  </body>
+</html>
